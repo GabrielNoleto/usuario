@@ -1,9 +1,11 @@
 package com.NoletoTech.usuario.controller;
 
 import com.NoletoTech.usuario.business.UsuarioService;
+import com.NoletoTech.usuario.business.ViaCepService;
 import com.NoletoTech.usuario.business.dto.EnderecoDTO;
 import com.NoletoTech.usuario.business.dto.TelefoneDTO;
 import com.NoletoTech.usuario.business.dto.UsuarioDTO;
+import com.NoletoTech.usuario.infrastructure.clients.ViaCepDTO;
 import com.NoletoTech.usuario.infrastructure.entity.Usuario;
 import com.NoletoTech.usuario.infrastructure.security.JwtUtil;
 import com.NoletoTech.usuario.infrastructure.security.SecurityConfig;
@@ -27,6 +29,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final ViaCepService viaCepService;
 
 @PostMapping
 @Operation(summary = "Salvar usuário", description = "Cria um novo usuário")
@@ -118,6 +121,11 @@ public class UsuarioController {
     @ApiResponse(responseCode = "500", description = "erro de servidor")
     public ResponseEntity<TelefoneDTO> cadastraTelefone(@RequestBody TelefoneDTO dto, @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(usuarioService.cadastraTelefone(token, dto));
+    }
+
+    @GetMapping("/endereco/{cep}")
+    public ResponseEntity<ViaCepDTO> buscarDadosCep(@PathVariable("cep")String cep){
+    return ResponseEntity.ok(viaCepService.buscarDadosEndereco(cep));
     }
 
 
