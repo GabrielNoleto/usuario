@@ -5,6 +5,7 @@ import com.noletotech.usuario.business.ViaCepService;
 import com.noletotech.usuario.business.dto.EnderecoDTO;
 import com.noletotech.usuario.business.dto.TelefoneDTO;
 import com.noletotech.usuario.business.dto.UsuarioDTO;
+import com.noletotech.usuario.business.dto.in.LoginRequestDTO;
 import com.noletotech.usuario.infrastructure.clients.ViaCepDTO;
 import com.noletotech.usuario.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,8 +40,8 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Usuário logado com sucesso")
     @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     @ApiResponse(responseCode = "500", description = "erro de servidor")
-    public ResponseEntity<String> login (@RequestBody UsuarioDTO usuarioDTO){
-    return ResponseEntity.ok(usuarioService.autenticarUsuario(usuarioDTO));
+    public ResponseEntity<String> login (@RequestBody LoginRequestDTO loginRequestDTO){
+    return ResponseEntity.ok(usuarioService.autenticarUsuario(loginRequestDTO));
     }
 
     @GetMapping

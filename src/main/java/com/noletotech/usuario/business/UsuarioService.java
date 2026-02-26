@@ -4,6 +4,7 @@ import com.noletotech.usuario.business.converter.UsuarioConverter;
 import com.noletotech.usuario.business.dto.EnderecoDTO;
 import com.noletotech.usuario.business.dto.TelefoneDTO;
 import com.noletotech.usuario.business.dto.UsuarioDTO;
+import com.noletotech.usuario.business.dto.in.LoginRequestDTO;
 import com.noletotech.usuario.infrastructure.entity.Endereco;
 import com.noletotech.usuario.infrastructure.entity.Telefone;
 import com.noletotech.usuario.infrastructure.entity.Usuario;
@@ -47,16 +48,17 @@ public class UsuarioService {
         return usuarioConverter.paraUsuarioDTO(usuario);
     }
 
-    public String autenticarUsuario(UsuarioDTO usuarioDTO){
+    public String autenticarUsuario(LoginRequestDTO loginRequestDTO){
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(), usuarioDTO.getSenha()));
+                    new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getSenha()));
             return "Bearer " + jwtUtil.generateToken(authentication.getName());
 
         }catch (BadCredentialsException | UsernameNotFoundException | AuthorizationDeniedException e){
             throw  new UnauthorizedException("Usuário ou senha inválidos", e.getCause());
         }
     }
+
 
     public void emailExiste(String email){
         try {
@@ -69,9 +71,13 @@ public class UsuarioService {
         }
 
         }
+
+
         public boolean verificaEmailExiste(String email){
         return usuarioRepository.existsByEmail(email);
         }
+
+
 
         public UsuarioDTO buscaUsuarioPorEmail(String email) {
             try {
@@ -82,9 +88,13 @@ public class UsuarioService {
                 throw new ResourceNotFoundException("Email não encontrado" + email);
             }
         }
+
+
         public void deletaUsuarioPorEmail (String email){
         usuarioRepository.deleteByEmail(email);
         }
+
+
 
         public UsuarioDTO atualizarDadosUsuario(String token, UsuarioDTO dto){
         String email = jwtUtil.extractUsername(token.substring(7));

@@ -32,17 +32,25 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.value(),
                 ex.getMessage(),
                 request.getRequestURI(),
-                "Not Found"));
+                "Conflict"));
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-        public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex){
-            return new ResponseEntity<>(ex.getMessage(),HttpStatus.UNAUTHORIZED);
+        public ResponseEntity<ErrorResponseDTO> handleUnauthorizedException(UnauthorizedException ex, HttpServletRequest request){
+            return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(buildError(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    ex.getMessage(),
+                    request.getRequestURI(),
+                    "Unauthorized"));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex){
-        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponseDTO> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request){
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildError(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                "Bad Request"));
     }
 
     private ErrorResponseDTO buildError(int status, String mensagem, String path, String error) {
